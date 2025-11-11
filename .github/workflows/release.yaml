@@ -119,18 +119,18 @@ jobs:
           pip install --upgrade pip==25.2
           pip install -r src/requirements.txt
 
-      # Step 2: Uncomment to add dependency vulnerability scanning
-      #👇 Uncomment this section in Step 2: Dependency Scanning
-      # - name: Install Security Tools
-      #   run: |
-      #     source venv/bin/activate
-      #     pip install pip-audit
+      Step 2: Uncomment to add dependency vulnerability scanning
+      👇 Uncomment this section in Step 2: Dependency Scanning
+      - name: Install Security Tools
+        run: |
+          source venv/bin/activate
+          pip install pip-audit
 
-      # - name: Scan for Vulnerable Dependencies
-      #   run: |
-      #     source venv/bin/activate
-      #     pip-audit --ignore-vuln GHSA-4xh5-x5gv-qwph
-      #     echo "✅ No critical vulnerabilities found"
+      - name: Scan for Vulnerable Dependencies
+        run: |
+          source venv/bin/activate
+          pip-audit --ignore-vuln GHSA-4xh5-x5gv-qwph
+          echo "✅ No critical vulnerabilities found"
 
       - name: Build Application (Development Environment)
         run: |
@@ -173,25 +173,25 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose version
 
-      # Step 3: Uncomment to add SBOM generation
-      # 👇 Uncomment this section in Step 3: Software Bill of Materials
-      # - name: Generate Software Bill of Materials (SBOM)
-      #   run: |
-      #     curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-      #     syft . -o cyclonedx-json > sbom.json
-      #     echo "📋 SBOM generated with $(jq '.components | length' sbom.json) components"
+      Step 3: Uncomment to add SBOM generation
+      👇 Uncomment this section in Step 3: Software Bill of Materials
+      - name: Generate Software Bill of Materials (SBOM)
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+          syft . -o cyclonedx-json > sbom.json
+          echo "📋 SBOM generated with $(jq '.components | length' sbom.json) components"
 
-      # - name: Upload SBOM as Artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: software-bill-of-materials
-      #     path: sbom.json
+      - name: Upload SBOM as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: software-bill-of-materials
+          path: sbom.json
 
-      # - name: Scan SBOM for Vulnerabilities
-      #   run: |
-      #     curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
-      #     grype sbom.json --fail-on high
-      #     echo "🔍 SBOM vulnerability scan completed"
+      - name: Scan SBOM for Vulnerabilities
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+          grype sbom.json --fail-on high
+          echo "🔍 SBOM vulnerability scan completed"
 
       - name: Get version from Git commit
         id: get_version
